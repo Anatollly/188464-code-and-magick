@@ -1,7 +1,7 @@
 # Личный проект «Код и Магия» [![Build status][travis-image]][travis-url] [![Dependency status][dependency-image]][dependency-url]
 
 * Студент: [Михаил Новиков](https://up.htmlacademy.ru/javascript/6/user/188464).
-* Наставник: `Неизвестно`.
+* Наставник: [Вадим Федоров](https://htmlacademy.ru/profile/id224110).
 
 ---
 
