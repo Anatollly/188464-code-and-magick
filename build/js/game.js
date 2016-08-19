@@ -395,19 +395,49 @@ window.Game = (function() {
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      var y = 30;
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          var messageContent = ['Поздравляем!', 'Вы выиграли!', 'Ура! :)'];
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          messageContent = ['Вы проиграли!', 'Печалька...', 'Увы...  :('];
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          messageContent = ['Игра на паузе!', 'Магия не убежит!', 'Нажмите пробел для игры!'];
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          messageContent = ['Добро пожаловать!', 'Время творить магию!', 'Нажмите пробел для игры!'];
           break;
+      }
+      this.ctx.font = '16px PT Mono';
+      this.ctx.textBaseLine = 'hanging';
+      this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+      this.ctx.beginPath();
+      this.ctx.moveTo(410, 10);
+      this.ctx.lineTo(660, 10);
+      this.ctx.lineTo(660, 160);
+      this.ctx.lineTo(435, 160);
+      this.ctx.lineTo(340, 210);
+      this.ctx.lineTo(410, 130);
+      this.ctx.closePath();
+      this.ctx.stroke();
+      this.ctx.fill();
+      this.ctx.fillStyle = 'white';
+      this.ctx.beginPath();
+      this.ctx.moveTo(400, 0);
+      this.ctx.lineTo(650, 0);
+      this.ctx.lineTo(650, 150);
+      this.ctx.lineTo(425, 150);
+      this.ctx.lineTo(330, 200);
+      this.ctx.lineTo(400, 120);
+      this.ctx.closePath();
+      this.ctx.stroke();
+      this.ctx.fill();
+      this.ctx.fillStyle = 'black';
+      for (var i = 0; i < messageContent.length; i++) {
+        this.ctx.fillText(messageContent[i], 410, y);
+        y += 30;
       }
     },
 
