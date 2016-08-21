@@ -1,5 +1,9 @@
 'use strict';
 
+require('./form.js');
+require('./check.js');
+require('./game.js');
+
 (function() {
   var game = new window.Game(document.querySelector('.demo'));
   game.initializeLevelAndStart();
