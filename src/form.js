@@ -32,3 +32,34 @@ window.form = (function() {
 
   return form;
 })();
+
+
+var reviewName = document.querySelector('#review-name');
+var reviewText = document.querySelector('#review-text');
+
+reviewName.required = true;
+
+var checkedMark;
+
+var setTextStatus = function() {
+  checkedMark = document.querySelector('input[name=review-mark]:checked');
+  if (checkedMark.value < 3) {
+    reviewText.required = true;
+  } else {
+    reviewText.required = null
+  };
+};
+
+
+var markLabel = document.querySelectorAll('label.review-mark-label');
+for (var i = 0; i < markLabel.length; i++) {
+  markLabel[i].onclick = setTextStatus();
+};
+
+setTextStatus();
+
+
+
+
+
+
