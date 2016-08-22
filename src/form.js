@@ -74,7 +74,7 @@ var setTextStatus = function() {
 };
 
 var setSubmitStatus = function() {
-  if ((reviewText.required === true && reviewText.value.length < 1) || (reviewName.value.length < 1 )) {
+  if ((reviewText.required === true && reviewText.value.length < 1) || (reviewName.value.length < 1)) {
     reviewSubmit.disabled = true;
   } else {
     reviewSubmit.disabled = null;
@@ -102,41 +102,38 @@ reviewFormField.forEach(function(form) {
 var reviewForm = document.querySelector('.review-form');
 var browserCookies = require('browser-cookies');
 
-var GRACE_HOPPER_BIRTHDAY = {
-  date: 9,
-  month: 11
+var daysToExpire = function() {
+  var now = new Date();
+  var nowYear = now.getFullYear();
+  var graceLastBirthdayYear = nowYear;
+  var graceBirthday = new Date(graceLastBirthdayYear, 11, 9);
+  if (graceBirthday >= now) {
+    graceLastBirthdayYear -= 1;
+    graceBirthday = new Date(graceLastBirthdayYear, 11, 9);
+  };
+  return Math.ceil((now - graceBirthday) / (3600 * 24 * 1000));
+
 };
 
-var today = {
-  date: new Date().getDate(),
-  month: new Date().getMonth()
+var setCookies = function() {
+  browserCookies.set('review-mark', checkedMark.value, { expires: daysToExpire() });
+  browserCookies.set('review-name', reviewName.value, { expires: daysToExpire() });
 };
 
-var experiationYear = new Date().getFullYear();
-
-if (GRACE_HOPPER_BIRTHDAY.date <= today.date && GRACE_HOPPER_BIRTHDAY.month <= today.month) {
-  experiationYear = new Date().getFullYear() + 1;
-}
-
-reviewForm.onsubmit = function() {
-  browserCookies.set('review-mark', checkedMark.value, {expires: new Date(experiationYear, GRACE_HOPPER_BIRTHDAY.month, GRACE_HOPPER_BIRTHDAY.date)});
-  browserCookies.set('review-name', reviewName.value, {expires: new Date(experiationYear, GRACE_HOPPER_BIRTHDAY.month, GRACE_HOPPER_BIRTHDAY.date)});
+var setDefault = function() {
+  var markCookie = browserCookies.get('review-mark');
+  var nameCookie = browserCookies.get('review-name');
+  if (checkedMark.value !== markCookie && markCookie !== null) {
+    document.querySelector('#review-mark-' + markCookie).checked = true;
+  }
+  if (reviewName.value !== nameCookie && nameCookie !== null) {
+    reviewName.value = nameCookie;
+  }
 };
 
-var reviewMarkCookie = browserCookies.get('review-mark');
-var reviewNameCookie = browserCookies.get('review-name');
+reviewForm.onsubmit = setCookies;
 
-//default mark
-if (checkedMark.value !== reviewMarkCookie && reviewMarkCookie !== null) {
-  document.querySelector('#review-mark-' + reviewMarkCookie).checked = true;
-}
-//default name
-if (reviewName.value !== reviewNameCookie && reviewNameCookie !== null) {
-  reviewName.value = reviewNameCookie;
-}
-
-
+setDefault();
 setTextStatus();
 setSubmitStatus();
 changeDisplayStatus();
-
