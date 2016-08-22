@@ -42,7 +42,8 @@ var reviewFormField = document.querySelectorAll('.review-form-field');
 var reviewFields = document.querySelector('.review-fields');
 var reviewSubmit = document.querySelector('.review-submit');
 var marks = document.querySelectorAll('input[name=review-mark]');
-var checkedMark;
+var checkedMark = document.querySelector('input[name=review-mark]:checked');
+
 
 var changeDisplayStatus = function() {
   if (reviewName.value.length > 0) {
@@ -87,6 +88,7 @@ for (var i = 0; i < marks.length; i++) {
   };
 }
 
+
 reviewName.required = true;
 
 reviewFormField.forEach(function(form) {
@@ -96,5 +98,7 @@ reviewFormField.forEach(function(form) {
   };
 });
 
+
 setTextStatus();
 setSubmitStatus();
+changeDisplayStatus();
