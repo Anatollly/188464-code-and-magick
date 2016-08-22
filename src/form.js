@@ -110,7 +110,7 @@ var daysToExpire = function() {
   if (graceBirthday >= now) {
     graceLastBirthdayYear -= 1;
     graceBirthday = new Date(graceLastBirthdayYear, 11, 9);
-  };
+  }
   return Math.ceil((now - graceBirthday) / (3600 * 24 * 1000));
 
 };
