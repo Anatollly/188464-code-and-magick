@@ -41,7 +41,8 @@ var reviewTextLabel = document.querySelector('.review-fields-text');
 var reviewFormField = document.querySelectorAll('.review-form-field');
 var reviewFields = document.querySelector('.review-fields');
 var reviewSubmit = document.querySelector('.review-submit');
-reviewName.required = true;
+var marks = document.querySelectorAll('input[name=review-mark]');
+var checkedMark;
 
 var changeDisplayStatus = function() {
   if (reviewName.value.length > 0) {
@@ -49,33 +50,26 @@ var changeDisplayStatus = function() {
   } else {
     reviewNameLabel.style.display = '';
   }
-  if (reviewText.value.length > 0) {
+  if (reviewText.value.length > 0 || checkedMark.value > 2) {
     reviewTextLabel.style.display = 'none';
   } else {
     reviewTextLabel.style.display = '';
   }
-  if (reviewName.value.length > 0 && reviewText.value.length > 0) {
+  if (reviewNameLabel.style.display === 'none' && reviewTextLabel.style.display === 'none') {
     reviewFields.style.display = 'none';
   } else {
     reviewFields.style.display = '';
   }
 };
 
-
-
 var setTextStatus = function() {
-  var checkedMark = document.querySelector('input[name=review-mark]:checked');
+  checkedMark = document.querySelector('input[name=review-mark]:checked');
   if (checkedMark.value < 3) {
     reviewText.required = true;
   } else {
     reviewText.required = null;
   }
 };
-
-var marks = document.querySelectorAll('input[name=review-mark]');
-for (var i = 0; i < marks.length; i++) {
-  marks[i].onchange = setTextStatus;
-}
 
 var setSubmitStatus = function() {
   if ((reviewText.required === true && reviewText.value.length < 1) || (reviewName.value.length < 1 )) {
@@ -84,6 +78,16 @@ var setSubmitStatus = function() {
     reviewSubmit.disabled = null;
   }
 };
+
+for (var i = 0; i < marks.length; i++) {
+  marks[i].onchange = function() {
+    setTextStatus();
+    changeDisplayStatus();
+    setSubmitStatus();
+  };
+}
+
+reviewName.required = true;
 
 reviewFormField.forEach(function(form) {
   form.oninput = function() {
