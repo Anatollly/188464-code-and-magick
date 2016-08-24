@@ -3,6 +3,7 @@
 var CALLBACK_URL = 'http://localhost:1506/api/reviews?callback=JSONPCallback';
 var reviews = [];
 var reviewsFilter = document.querySelector('.reviews-filter');
+var elementToClone;
 reviewsFilter.classList.add('invisible');
 // Saves received by JSONPCallback function data
 function saveReviewsData(data) {
@@ -24,49 +25,47 @@ JSONPCallback  - same as callback name */
   document.body.appendChild(scriptEl);
 }
 
+
+function getReviewElement(someData, container) {
+  var reviewElement = elementToClone.cloneNode(true);
+
+  reviewElement.querySelector('.review-text').textContent = someData.description;
+  reviewElement.querySelector('.review-author').title = someData.author.name;
+  reviewElement.querySelector('.review-rating').textContent = someData.rating;
+
+  var authorImage = new Image(124, 124);
+
+  var TIMEOUT = 10000;
+
+  var authorImageTimeout;
+
+  authorImage.onload = function() {
+    clearTimeout(authorImageTimeout);
+    reviewElement.querySelector('.review-author').src = authorImage.src;
+  };
+
+  authorImage.onerror = function() {
+    reviewElement.classList.add('review-load-failure');
+  };
+
+  authorImage.src = someData.author.picture;
+  authorImageTimeout = setTimeout(function() {
+    authorImage.src = '';
+    reviewElement.classList.add('review-load-failure');
+  }, TIMEOUT);
+
+  container.appendChild(reviewElement);
+}
+
 function renderToPage(data) {
 
   var reviewTemplate = document.querySelector('#review-template');
   var reviewsList = document.querySelector('.reviews-list');
-  var elementToClone;
 
   if ('content' in reviewTemplate) {
     elementToClone = reviewTemplate.content.querySelector('.review');
   } else {
     elementToClone = reviewTemplate.querySelector('.review');
-  }
-
-  function getReviewElement(someData, container) {
-
-    var reviewElement = elementToClone.cloneNode(true);
-
-    reviewElement.querySelector('.review-text').textContent = someData.description;
-    reviewElement.querySelector('.review-author').title = someData.author.name;
-    reviewElement.querySelector('.review-rating').textContent = someData.rating;
-
-    var authorImage = new Image(124, 124);
-
-    var TIMEOUT = 10000;
-
-    var authorImageTimeout;
-
-    authorImage.onload = function() {
-      clearTimeout(authorImageTimeout);
-      reviewElement.querySelector('.review-author').src = authorImage.src;
-    };
-
-    authorImage.onerror = function() {
-      reviewElement.classList.add('review-load-failure');
-    };
-
-    authorImage.src = someData.author.picture;
-
-    authorImageTimeout = setTimeout(function() {
-      authorImage.src = '';
-      reviewElement.classList.add('review-load-failure');
-    }, TIMEOUT);
-
-    container.appendChild(reviewElement);
   }
 
   saveReviewsData(data); //Saving data to review variable
