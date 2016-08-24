@@ -7,6 +7,24 @@ var reviews = [];
 function saveReviewsData(data) {
   reviews = data;
   console.log(reviews);
+}
+
+function getCallback(url, doSomething) {
+/*Describing JSONPCallback function
+JSONPCallback  - same as callback name */
+  window.JSONPCallback = function(data) {
+    doSomething(data);
+  };
+// Describing our new script
+  var scriptEl = document.createElement('script');
+// Launches HTTP request with url
+  scriptEl.src = url;
+// Creating and running our new script with JSONPCallback function
+  document.body.appendChild(scriptEl);
+}
+
+
+function renderToPage(data) {
 
   var reviewsFilter = document.querySelector('.reviews-filter');
   var reviewTemplate = document.querySelector('#review-template');
@@ -21,7 +39,7 @@ function saveReviewsData(data) {
     elementToClone = reviewTemplate.querySelector('.review');
   }
 
-  var getReviewElement = function(someData, container) {
+  function getReviewElement(someData, container) {
 
     var reviewElement = elementToClone.cloneNode(true);
 
@@ -52,8 +70,9 @@ function saveReviewsData(data) {
     }, TIMEOUT);
 
     container.appendChild(reviewElement);
-  };
+  }
 
+  saveReviewsData(data); //Saving data to review variable
 
   reviews.forEach(function(review) {
     getReviewElement(review, reviewsList);
@@ -62,23 +81,5 @@ function saveReviewsData(data) {
   reviewsFilter.classList.remove('invisible');
 }
 
-function getCallback(url, doSomething) {
 
-/*Describing JSONPCallback function
-JSONPCallback  - same as callback name */
-  window.JSONPCallback = function(data) {
-    doSomething(data);
-  };
-
-// Describing our new script
-  var scriptEl = document.createElement('script');
-
-// Launches HTTP request with url
-  scriptEl.src = url;
-
-// Creating and running our new script with JSONPCallback function
-  document.body.appendChild(scriptEl);
-}
-
-
-getCallback(CALLBACK_URL, saveReviewsData);
+getCallback(CALLBACK_URL, renderToPage);
