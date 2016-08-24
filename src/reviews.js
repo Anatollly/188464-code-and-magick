@@ -2,7 +2,8 @@
 // JSONPCallback is callback name
 var CALLBACK_URL = 'http://localhost:1506/api/reviews?callback=JSONPCallback';
 var reviews = [];
-
+var reviewsFilter = document.querySelector('.reviews-filter');
+reviewsFilter.classList.add('invisible');
 // Saves received by JSONPCallback function data
 function saveReviewsData(data) {
   reviews = data;
@@ -23,15 +24,11 @@ JSONPCallback  - same as callback name */
   document.body.appendChild(scriptEl);
 }
 
-
 function renderToPage(data) {
 
-  var reviewsFilter = document.querySelector('.reviews-filter');
   var reviewTemplate = document.querySelector('#review-template');
   var reviewsList = document.querySelector('.reviews-list');
   var elementToClone;
-
-  reviewsFilter.classList.add('invisible');
 
   if ('content' in reviewTemplate) {
     elementToClone = reviewTemplate.content.querySelector('.review');
@@ -77,9 +74,7 @@ function renderToPage(data) {
   reviews.forEach(function(review) {
     getReviewElement(review, reviewsList);
   });
-
   reviewsFilter.classList.remove('invisible');
 }
-
 
 getCallback(CALLBACK_URL, renderToPage);
