@@ -14,9 +14,7 @@ function saveReviewsData(data) {
 function getCallback(url, doSomething) {
 /*Describing JSONPCallback function
 JSONPCallback  - same as callback name */
-  window.JSONPCallback = function(data) {
-    doSomething(data);
-  };
+  window.JSONPCallback = doSomething;
 // Describing our new script
   var scriptEl = document.createElement('script');
 // Launches HTTP request with url
